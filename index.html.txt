@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Nutrition Planner</title>
+    <style>
+        :root {
+            --primary: #FF9933;
+            --secondary: #138808;
+            --accent: #000080;
+            --light: #f8f8f8;
+            --dark: #333;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+
+        header {
+          background: linear-gradient(135deg, #1a1c2c, #2d3047);
+          color: white;
+          text-align: center;
+          padding: 2rem 1rem;
+         box-shadow: var(--shadow);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+        
+        .heading {
+            color: var(--accent);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .col-1 {
+            flex: 1 1 300px;
+        }
+        
+        .col-2 {
+            flex: 2 1 600px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #e07f1f;
+        }
+        
+        .food-list {
+            margin: 1rem 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .food-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .food-item:last-child {
+            border-bottom: none;
+        }
+        
+        .food-item button {
+            background-color: var(--secondary);
+            padding: 0.4rem 0.8rem;
+            font-size: 0.9rem;
+        }
+        
+        .meal-plan {
+            margin-top: 1rem;
+        }
+        
+        .meal {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        .meal h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+        
+        .meal-items {
+            padding-left: 1rem;
+        }
+        
+        .meal-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+        }
+        
+        .meal-item button {
+            background-color: #d9534f;
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .chart-container {
+            height: 300px;
+            margin: 1rem 0;
+        }
+        
+        .plate-visualization {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            margin: 1rem auto;
+            position: relative;
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
+        
+        .nutrient-bar {
+            height: 20px;
+            margin-bottom: 0.5rem;
+            background-color: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .nutrient-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        
+        .nutrient-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+        }
+        
+        .thali-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .thali {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            background-color: #e0e0e0;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 20px;
+        }
+        
+        .food-compartment {
+            position: absolute;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.8rem;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .rice {
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background-color: #fff9e6;
+        }
+        
+        .dal {
+            width: 70px;
+            height: 70px;
+            top: 30%;
+            left: 30%;
+            border-radius: 50%;
+            background-color: #ffd966;
+        }
+        
+        .sabzi {
+            width: 80px;
+            height: 80px;
+            top: 70%;
+            left: 30%;
+            border-radius: 50%;
+            background-color: #b6d7a8;
+        }
+        
+        .roti {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            right: 20%;
+            border-radius: 50%;
+            background-color: #e6c9a8;
+        }
+        
+        .raita {
+            width: 50px;
+            height: 50px;
+            bottom: 25%;
+            right: 25%;
+            border-radius: 50%;
+            background-color: #d9ead3;
+        }
+        
+        .pickle {
+            width: 30px;
+            height: 30px;
+            top: 20%;
+            right: 30%;
+            border-radius: 50%;
+            background-color: #ea9999;
+        }
+        
+        @media (max-width: 768px) {
+            .flex {
+                flex-direction: column;
+            }
+            
+            .thali {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .food-compartment {
+                transform: scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Nutrition Planner</h1>
+        <div class="subtitle">Plan your balanced meals with easy visualization</div>
+    </header>
+    
+    <div class="container">
+        <div class="flex">
+            <div class="col-1">
+                <div class="card">
+                    <h2 class="heading">Personal Details</h2>
+                    <form id="user-form">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" min="1" max="120" required>
+                        
+                        <label for="gender">Gender</label>
+                        <select id="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" min="1" max="300" step="0.1" required>
+                        
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" min="50" max="250" required>
+                        
+                        <label for="activity">Activity Level</label>
+                        <select id="activity" required>
+                            <option value="">Select activity level</option>
+                            <option value="sedentary">Sedentary (little or no exercise)</option>
+                            <option value="light">Lightly active (light exercise 1-3 days/week)</option>
+                            <option value="moderate">Moderately active (moderate exercise 3-5 days/week)</option>
+                            <option value="active">Active (hard exercise 6-7 days/week)</option>
+                            <option value="very">Very active (hard daily exercise & physical job)</option>
+                        </select>
+                        
+                        <label for="diet-type">Diet Preference</label>
+                        <select id="diet-type" required>
+                            <option value="">Select diet type</option>
+                            <option value="vegetarian">Vegetarian</option>
+                            <option value="vegan">Vegan</option>
+                            <option value="non-vegetarian">Non-vegetarian</option>
+                        </select>
+                        
+                        <button type="submit">Calculate Requirements</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h2 class="heading">Daily Requirements</h2>
+                    <div id="requirements">
+                        <p>Fill your details to calculate daily requirements.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-2">
+                <div class="card">
+                    <h2 class="heading">Meal Planner</h2>
+                    
+                    <div class="flex">
+                        <div class="col-1">
+                            <label for="meal-type">Meal Type</label>
+                            <select id="meal-type">
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="snack">Snack</option>
+                                <option value="dinner">Dinner</option>
+                            </select>
+                            
+                            <label for="food-search">Search Food</label>
+                            <input type="text" id="food-search" placeholder="Search Indian foods...">
+                            
+                            <div class="food-list" id="food-results">
+                                <!-- Food search results will appear here -->
+                            </div>
+                        </div>
+                        
+                        <div class="col-1">
+                            <h3>Today's Meal Plan</h3>
+                            <div id="meal-plan" class="meal-plan">
+                                <div class="meal">
+                                    <h3>Breakfast</h3>
+                                    <div id="breakfast-items" class="meal-items">
+                                        <p>No items added yet</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="meal">
+                                    <h3>Lunch</h3>
+                                    <div id="lunch-items" class="meal-items">
+                                        <p>No items added yet</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="meal">
+                                    <h3>Snack</h3>
+                                    <div id="snack-items" class="meal-items">
+                                        <p>No items added yet</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="meal">
+                                    <h3>Dinner</h3>
+                                    <div id="dinner-items" class="meal-items">
+                                        <p>No items added yet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h2 class="heading">Nutrition Visualization</h2>
+                    
+                    <div class="flex">
+                        <div class="col-1">
+                            <h3>Nutrient Breakdown</h3>
+                            
+                            <div class="nutrient-label">
+                                <span>Calories</span>
+                                <span id="calorie-value">0/0 kcal</span>
+                            </div>
+                            <div class="nutrient-bar">
+                                <div class="nutrient-fill" id="calorie-fill" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="nutrient-label">
+                                <span>Protein</span>
+                                <span id="protein-value">0/0 g</span>
+                            </div>
+                            <div class="nutrient-bar">
+                                <div class="nutrient-fill" id="protein-fill" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="nutrient-label">
+                                <span>Carbohydrates</span>
+                                <span id="carbs-value">0/0 g</span>
+                            </div>
+                            <div class="nutrient-bar">
+                                <div class="nutrient-fill" id="carbs-fill" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="nutrient-label">
+                                <span>Fat</span>
+                                <span id="fat-value">0/0 g</span>
+                            </div>
+                            <div class="nutrient-bar">
+                                <div class="nutrient-fill" id="fat-fill" style="width: 0%"></div>
+                            </div>
+                            
+                            <div class="nutrient-label">
+                                <span>Fiber</span>
+                                <span id="fiber-value">0/0 g</span>
+                            </div>
+                            <div class="nutrient-bar">
+                                <div class="nutrient-fill" id="fiber-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-1">
+                            <h3>Meal Visualization</h3>
+                            <div class="thali-container">
+                                <div class="thali" id="thali-visualization">
+                                    <div class="food-compartment rice">Rice</div>
+                                    <div class="food-compartment dal">Dal</div>
+                                    <div class="food-compartment sabzi">Sabzi</div>
+                                    <div class="food-compartment roti">Roti</div>
+                                    <div class="food-compartment raita">Raita</div>
+                                    <div class="food-compartment pickle">Pickle</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const indianFoods = [
+            {
+                name: "Basmati Rice (cooked)",
+                category: "cereal",
+                calories: 130,
+                protein: 2.7,
+                carbs: 28,
+                fat: 0.3,
+                fiber: 0.4,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 150 // grams
+            },
+            {
+                name: "Toor Dal (cooked)",
+                category: "dal",
+                calories: 116,
+                protein: 7.2,
+                carbs: 20.1,
+                fat: 0.4,
+                fiber: 5.2,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Roti/Chapati",
+                category: "cereal",
+                calories: 120,
+                protein: 3.1,
+                carbs: 18.5,
+                fat: 3.7,
+                fiber: 1.2,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 30 // One chapati
+            },
+            {
+                name: "Paneer",
+                category: "dairy",
+                calories: 265,
+                protein: 18.3,
+                carbs: 3.6,
+                fat: 20.8,
+                fiber: 0,
+                vegetarian: true,
+                vegan: false,
+                servingSize: 50
+            },
+            {
+                name: "Palak/Spinach (cooked)",
+                category: "vegetable",
+                calories: 23,
+                protein: 2.9,
+                carbs: 3.6,
+                fat: 0.4,
+                fiber: 2.2,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Aloo/Potato (cooked)",
+                category: "vegetable",
+                calories: 87,
+                protein: 1.9,
+                carbs: 20.1,
+                fat: 0.1,
+                fiber: 1.8,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Chicken Curry",
+                category: "non-veg",
+                calories: 190,
+                protein: 19,
+                carbs: 6,
+                fat: 10,
+                fiber: 1.5,
+                vegetarian: false,
+                vegan: false,
+                servingSize: 150
+            },
+            {
+                name: "Curd/Yogurt",
+                category: "dairy",
+                calories: 59,
+                protein: 3.3,
+                carbs: 4.8,
+                fat: 3.2,
+                fiber: 0,
+                vegetarian: true,
+                vegan: false,
+                servingSize: 100
+            },
+            {
+                name: "Idli",
+                category: "cereal",
+                calories: 39,
+                protein: 2.1,
+                carbs: 8.3,
+                fat: 0.1,
+                fiber: 0.6,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 30 // One idli
+            },
+            {
+                name: "Dosa",
+                category: "cereal",
+                calories: 120,
+                protein: 3.0,
+                carbs: 20.5,
+                fat: 3.2,
+                fiber: 0.8,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 70 // One dosa
+            },
+            {
+                name: "Sambar",
+                category: "dal",
+                calories: 65,
+                protein: 2.5,
+                carbs: 10.5,
+                fat: 1.5,
+                fiber: 2.5,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Chana Masala",
+                category: "dal",
+                calories: 166,
+                protein: 9.0,
+                carbs: 22.0,
+                fat: 5.8,
+                fiber: 7.6,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Paratha",
+                category: "cereal",
+                calories: 210,
+                protein: 5.0,
+                carbs: 30.0,
+                fat: 8.0,
+                fiber: 1.5,
+                vegetarian: true,
+                vegan: false,
+                servingSize: 60 // One paratha
+            },
+            {
+                name: "Butter Chicken",
+                category: "non-veg",
+                calories: 245,
+                protein: 23.0,
+                carbs: 8.0,
+                fat: 14.0,
+                fiber: 1.0,
+                vegetarian: false,
+                vegan: false,
+                servingSize: 150
+            },
+            {
+                name: "Rajma",
+                category: "dal",
+                calories: 143,
+                protein: 8.7,
+                carbs: 25.8,
+                fat: 0.5,
+                fiber: 8.2,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Upma",
+                category: "cereal",
+                calories: 119,
+                protein: 3.8,
+                carbs: 19.6,
+                fat: 3.2,
+                fiber: 1.4,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Poha",
+                category: "cereal",
+                calories: 131,
+                protein: 2.5,
+                carbs: 26.7,
+                fat: 1.6,
+                fiber: 1.2,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Bhindi/Okra (cooked)",
+                category: "vegetable",
+                calories: 33,
+                protein: 1.9,
+                carbs: 7.5,
+                fat: 0.2,
+                fiber: 3.2,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Mung Sprouts",
+                category: "dal",
+                calories: 82,
+                protein: 7.0,
+                carbs: 14.0,
+                fat: 0.2,
+                fiber: 2.5,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 100
+            },
+            {
+                name: "Tandoori Roti",
+                category: "cereal",
+                calories: 110,
+                protein: 3.5,
+                carbs: 17.0,
+                fat: 3.0,
+                fiber: 1.5,
+                vegetarian: true,
+                vegan: true,
+                servingSize: 40
+            }
+        ];
+
+        let userRequirements = {
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0,
+            fiber: 0
+        };
+        
+        let currentMeals = {
+            breakfast: [],
+            lunch: [],
+            snack: [],
+            dinner: []
+        };
+        
+        let dailyTotal = {
+            calories: 0,
+            protein: 0,
+            carbs: 0,
+            fat: 0,
+            fiber: 0
+        };
+
+        const userForm = document.getElementById('user-form');
+        const requirementsDiv = document.getElementById('requirements');
+        const foodSearch = document.getElementById('food-search');
+        const foodResults = document.getElementById('food-results');
+        const mealTypeSelect = document.getElementById('meal-type');
+        const mealPlanDiv = document.getElementById('meal-plan');
+        const thaliVisualization = document.getElementById('thali-visualization');
+        
+        userForm.addEventListener('submit', calculateRequirements);
+        foodSearch.addEventListener('input', searchFoods);
+        
+        function calculateRequirements(e) {
+            e.preventDefault();
+            
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseInt(document.getElementById('height').value);
+            const activity = document.getElementById('activity').value;
+            const dietType = document.getElementById('diet-type').value;
+     
+            let bmr;
+            if (gender === 'male') {
+                bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+            } else {
+                bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+            }
+            
+            let activityMultiplier;
+            switch(activity) {
+                case 'sedentary':
+                    activityMultiplier = 1.2;
+                    break;
+                case 'light':
+                    activityMultiplier = 1.375;
+                    break;
+                case 'moderate':
+                    activityMultiplier = 1.55;
+                    break;
+                case 'active':
+                    activityMultiplier = 1.725;
+                    break;
+                case 'very':
+                    activityMultiplier = 1.9;
+                    break;
+                default:
+                    activityMultiplier = 1.2;
+            }
+            
+            const dailyCalories = Math.round(bmr * activityMultiplier);
+            
+            let proteinPercentage, carbsPercentage, fatPercentage;
+            
+            if (dietType === 'vegetarian' || dietType === 'vegan') {
+                proteinPercentage = 15; 
+                carbsPercentage = 60;
+                fatPercentage = 25;
+            } else {
+                proteinPercentage = 18; 
+                carbsPercentage = 55;
+                fatPercentage = 27;
+            }
+            
+            const proteinGrams = Math.round((dailyCalories * (proteinPercentage/100)) / 4); 
+            const carbsGrams = Math.round((dailyCalories * (carbsPercentage/100)) / 4); 
+            const fatGrams = Math.round((dailyCalories * (fatPercentage/100)) / 9); 
+            
+            const fiberGrams = Math.round(age < 18 ? age + 5 : (gender === 'male' ? 38 : 25));
+            
+            userRequirements = {
+                calories: dailyCalories,
+                protein: proteinGrams,
+                carbs: carbsGrams,
+                fat: fatGrams,
+                fiber: fiberGrams
+            };
+            
+            requirementsDiv.innerHTML = `
+                <p><strong>Daily Calorie Needs:</strong> ${dailyCalories} kcal</p>
+                <p><strong>Protein:</strong> ${proteinGrams} g</p>
+                <p><strong>Carbohydrates:</strong> ${carbsGrams} g</p>
+                <p><strong>Fat:</strong> ${fatGrams} g</p>
+                <p><strong>Fiber:</strong> ${fiberGrams} g</p>
+            `;
+            
+            updateNutritionBars();
+        }
+        
+        function searchFoods() {
+            const searchTerm = foodSearch.value.toLowerCase();
+            const dietType = document.getElementById('diet-type').value;
+            
+            if (searchTerm.length < 2) {
+                foodResults.innerHTML = '';
+                return;
+            }
+            
+            let filteredFoods = indianFoods.filter(food => 
+                food.name.toLowerCase().includes(searchTerm)
+            );
+            
+            if (dietType === 'vegetarian') {
+                filteredFoods = filteredFoods.filter(food => food.vegetarian);
+            } else if (dietType === 'vegan') {
+                filteredFoods = filteredFoods.filter(food => food.vegan);
+            }
+            
+            if (filteredFoods.length === 0) {
+                foodResults.innerHTML = '<p>No foods found</p>';
+            } else {
+                foodResults.innerHTML = '';
+                
+                filteredFoods.forEach(food => {
+                    const foodItem = document.createElement('div');
+                    foodItem.className = 'food-item';
+                    foodItem.innerHTML = `
+                        <div>
+                            <strong>${food.name}</strong>
+                            <div>${food.calories} kcal per ${food.servingSize}g</div>
+                        </div>
+                        <button class="add-food-btn" data-food="${food.name}">Add</button>
+                    `;
+                    foodResults.appendChild(foodItem);
+                    
+                    const addBtn = foodItem.querySelector('.add-food-btn');
+                    addBtn.addEventListener('click', () => addFoodToMeal(food));
+                });
+            }
+        }
+       
+        function addFoodToMeal(food) {
+            const mealType = mealTypeSelect.value;
+            
+            currentMeals[mealType].push(food);
+            
+            updateMealPlanDisplay();
+           
+            calculateDailyTotals();
+            updateNutritionBars();
+            updateThaliVisualization();
+        }
+        
+        function updateMealPlanDisplay() {
+        
+            ['breakfast', 'lunch', 'snack', 'dinner'].forEach(mealType => {
+                const mealItemsDiv = document.getElementById(`${mealType}-items`);
+                
+                if (currentMeals[mealType].length === 0) {
+                    mealItemsDiv.innerHTML = '<p>No items added yet</p>';
+                } else {
+                    mealItemsDiv.innerHTML = '';
+                    
+                    currentMeals[mealType].forEach((food, index) => {
+                        const mealItem = document.createElement('div');
+                        mealItem.className = 'meal-item';
+                        mealItem.innerHTML = `
+                            <div>${food.name} (${food.servingSize}g)</div>
+                            <button class="remove-food-btn" data-meal="${mealType}" data-index="${index}">Remove</button>
+                        `;
+                        mealItemsDiv.appendChild(mealItem);
+                        
+                        const removeBtn = mealItem.querySelector('.remove-food-btn');
+                        removeBtn.addEventListener('click', removeFood);
+                    });
+                }
+            });
+        }
+        
+        function removeFood(e) {
+            const mealType = e.target.dataset.meal;
+            const index = parseInt(e.target.dataset.index);
+            
+            currentMeals[mealType].splice(index, 1);
+            
+            updateMealPlanDisplay();
+            calculateDailyTotals();
+            updateNutritionBars();
+            updateThaliVisualization();
+        }
+        
+        function calculateDailyTotals() {
+         
+            dailyTotal = {
+                calories: 0,
+                protein: 0,
+                carbs: 0,
+                fat: 0,
+                fiber: 0
+            };
+            
+            for (const mealType in currentMeals) {
+                currentMeals[mealType].forEach(food => {
+                    const multiplier = food.servingSize / 100;
+                    
+                    dailyTotal.calories += food.calories * multiplier;
+                    dailyTotal.protein += food.protein * multiplier;
+                    dailyTotal.carbs += food.carbs * multiplier;
+                    dailyTotal.fat += food.fat * multiplier;
+                    dailyTotal.fiber += food.fiber * multiplier;
+                });
+            }
+            
+            for (const nutrient in dailyTotal) {
+                dailyTotal[nutrient] = Math.round(dailyTotal[nutrient]);
+            }
+        }
+        
+        function updateNutritionBars() {
+            if (userRequirements.calories === 0) return; 
+            
+            document.getElementById('calorie-value').textContent = `${dailyTotal.calories}/${userRequirements.calories} kcal`;
+            document.getElementById('calorie-fill').style.width = `${Math.min(100, (dailyTotal.calories / userRequirements.calories) * 100)}%`;
+            
+            document.getElementById('protein-value').textContent = `${dailyTotal.protein}/${userRequirements.protein} g`;
+            document.getElementById('protein-fill').style.width = `${Math.min(100, (dailyTotal.protein / userRequirements.protein) * 100)}%`;
+            
+            document.getElementById('carbs-value').textContent = `${dailyTotal.carbs}/${userRequirements.carbs} g`;
+            document.getElementById('carbs-fill').style.width = `${Math.min(100, (dailyTotal.carbs / userRequirements.carbs) * 100)}%`;
+            
+            document.getElementById('fat-value').textContent = `${dailyTotal.fat}/${userRequirements.fat} g`;
+            document.getElementById('fat-fill').style.width = `${Math.min(100, (dailyTotal.fat / userRequirements.fat) * 100)}%`;
+            
+            document.getElementById('fiber-value').textContent = `${dailyTotal.fiber}/${userRequirements.fiber} g`;
+            document.getElementById('fiber-fill').style.width = `${Math.min(100, (dailyTotal.fiber / userRequirements.fiber) * 100)}%`;
+        }
+        
+        function updateThaliVisualization() {
+            const allFoods = [].concat(...Object.values(currentMeals));
+            
+            if (allFoods.length === 0) {
+                thaliVisualization.innerHTML = `
+                    <div class="food-compartment rice">Rice</div>
+                    <div class="food-compartment dal">Dal</div>
+                    <div class="food-compartment sabzi">Sabzi</div>
+                    <div class="food-compartment roti">Roti</div>
+                    <div class="food-compartment raita">Raita</div>
+                    <div class="food-compartment pickle">Pickle</div>
+                `;
+                return;
+            }
+            
+            const foodByCategory = {
+                cereal: [],
+                dal: [],
+                vegetable: [],
+                dairy: [],
+                'non-veg': []
+            };
+            
+            allFoods.forEach(food => {
+                if (foodByCategory[food.category]) {
+                    foodByCategory[food.category].push(food);
+                }
+            });
+            
+            thaliVisualization.innerHTML = '';
+            
+            if (foodByCategory.cereal.length > 0) {
+                const cerealDiv = document.createElement('div');
+                cerealDiv.className = 'food-compartment rice';
+                cerealDiv.textContent = foodByCategory.cereal[0].name;
+                cerealDiv.title = `${foodByCategory.cereal[0].calories} kcal`;
+                thaliVisualization.appendChild(cerealDiv);
+            } else {
+                const cerealDiv = document.createElement('div');
+                cerealDiv.className = 'food-compartment rice';
+                cerealDiv.textContent = 'Rice/Cereal';
+                thaliVisualization.appendChild(cerealDiv);
+            }
+            
+            if (foodByCategory.dal.length > 0) {
+                const dalDiv = document.createElement('div');
+                dalDiv.className = 'food-compartment dal';
+                dalDiv.textContent = foodByCategory.dal[0].name;
+                dalDiv.title = `${foodByCategory.dal[0].calories} kcal`;
+                thaliVisualization.appendChild(dalDiv);
+            } else {
+                const dalDiv = document.createElement('div');
+                dalDiv.className = 'food-compartment dal';
+                dalDiv.textContent = 'Dal';
+                thaliVisualization.appendChild(dalDiv);
+            }
+            
+            if (foodByCategory.vegetable.length > 0) {
+                const vegDiv = document.createElement('div');
+                vegDiv.className = 'food-compartment sabzi';
+                vegDiv.textContent = foodByCategory.vegetable[0].name;
+                vegDiv.title = `${foodByCategory.vegetable[0].calories} kcal`;
+                thaliVisualization.appendChild(vegDiv);
+            } else {
+                const vegDiv = document.createElement('div');
+                vegDiv.className = 'food-compartment sabzi';
+                vegDiv.textContent = 'Sabzi';
+                thaliVisualization.appendChild(vegDiv);
+            }
+            
+            if (foodByCategory['non-veg'].length > 0) {
+                const proteinDiv = document.createElement('div');
+                proteinDiv.className = 'food-compartment roti';
+                proteinDiv.textContent = foodByCategory['non-veg'][0].name;
+                proteinDiv.title = `${foodByCategory['non-veg'][0].calories} kcal`;
+                proteinDiv.style.backgroundColor = '#ffcccc';
+                thaliVisualization.appendChild(proteinDiv);
+            } else if (foodByCategory.dal.length > 1) {
+                const proteinDiv = document.createElement('div');
+                proteinDiv.className = 'food-compartment roti';
+                proteinDiv.textContent = foodByCategory.dal[1].name;
+                proteinDiv.title = `${foodByCategory.dal[1].calories} kcal`;
+                thaliVisualization.appendChild(proteinDiv);
+            } else {
+                const proteinDiv = document.createElement('div');
+                proteinDiv.className = 'food-compartment roti';
+                proteinDiv.textContent = 'Protein';
+                thaliVisualization.appendChild(proteinDiv);
+            }
+            
+            if (foodByCategory.dairy.length > 0) {
+                const dairyDiv = document.createElement('div');
+                dairyDiv.className = 'food-compartment raita';
+                dairyDiv.textContent = foodByCategory.dairy[0].name;
+                dairyDiv.title = `${foodByCategory.dairy[0].calories} kcal`;
+                thaliVisualization.appendChild(dairyDiv);
+            } else {
+                const dairyDiv = document.createElement('div');
+                dairyDiv.className = 'food-compartment raita';
+                dairyDiv.textContent = 'Dairy';
+                thaliVisualization.appendChild(dairyDiv);
+            }
+            
+            const pickleDiv = document.createElement('div');
+            pickleDiv.className = 'food-compartment pickle';
+            pickleDiv.textContent = 'Pickle';
+            thaliVisualization.appendChild(pickleDiv);
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            updateMealPlanDisplay();
+            updateThaliVisualization();
+        });
+    </script>
+</body>
+</html>
